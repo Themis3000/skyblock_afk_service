@@ -5,7 +5,6 @@
     <title>Panel</title>
 </head>
 <body>
-    <label for="token_input">Token: </label><input id="token_input"><br>
     <button onclick="botStart()">Start</button>
     <button onclick="botStop()">Stop</button><br>
     <div>Bot is currently <b id="online_display"></b></div>
@@ -13,19 +12,24 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
-        const tokenInput = document.getElementById("token_input")
         const onlineDisplay = document.getElementById("online_display")
 
         socket.on("botStatus", (msg) => {
             onlineDisplay.innerText = msg["status"]
         })
 
+        socket.on("message", (msg) => {
+            console.log(`message: ${msg["content"]}`)
+        })
+
         function botStart() {
-            socket.emit("startBot", {"token": tokenInput.value})
+            console.log("sending start command")
+            socket.emit("botStart")
         }
 
         function botStop() {
-            socket.emit("stopBot", {"token": tokenInput.value})
+            console.log("sending stop command")
+            socket.emit("botStop")
         }
     </script>
 </body>

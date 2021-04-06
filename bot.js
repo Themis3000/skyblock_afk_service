@@ -17,7 +17,7 @@ class AfkBot {
 
         this.bot.once("login", () => {
             this.connected = true
-            this.events.emit("connected")
+            this.events.emit("statusUpdate", this.status)
         })
 
         this.bot.once("spawn", () => {
@@ -52,7 +52,7 @@ class AfkBot {
 
         this.bot.once('end', () => {
             this.connected = false
-            this.events.emit("disconnected")
+            this.events.emit("statusUpdate", this.status)
             if (this.reconnect)
                 setTimeout(this.createBot, 1000*60*15)
         })
@@ -67,6 +67,15 @@ class AfkBot {
     connect() {
         this.reconnect = true
         this.createBot()
+    }
+
+    get status() {
+        if (this.connected) {
+            if (this.reconnect)
+                return "offline, will be auto reconnecting soon"
+            return "online"
+        }
+        return "offline"
     }
 
     checkAdmin(username) {
