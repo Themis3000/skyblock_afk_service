@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel</title>
+</head>
+<body>
+    <label for="token_input">Token: </label><input id="token_input"><br>
+    <button onclick="botStart()">Start</button>
+    <button onclick="botStop()">Stop</button><br>
+    <div>Bot is currently <b id="online_display"></b></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const tokenInput = document.getElementById("token_input")
+        const onlineDisplay = document.getElementById("online_display")
+
+        socket.on("botStatus", (msg) => {
+            onlineDisplay.innerText = msg["status"]
+        })
+
+        function botStart() {
+            socket.emit("startBot", {"token": tokenInput.value})
+        }
+
+        function botStop() {
+            socket.emit("stopBot", {"token": tokenInput.value})
+        }
+    </script>
+</body>
+</html>

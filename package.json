@@ -1,0 +1,10 @@
+{
+  "name": "afk_service",
+  "version": "1.0.0",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mineflayer": "^3.6.0",
+    "mineflayer-pathfinder": "^1.6.1",
+    "socket.io": "^4.0.1"
+  }
+}
