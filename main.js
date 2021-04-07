@@ -1,12 +1,15 @@
 const app = require('express')()
 const http = require('http').Server(app)
 const io = require('socket.io')(http)
-const wwwhisper = require('connect-wwwhisper')
 const bot = require('./bot.js')
+const basicAuth = require('express-basic-auth')
 
 const afkBot = new bot.AfkBot()
 
-app.use(wwwhisper())
+app.use(basicAuth({
+    users: { admin: process.env.WEBPASSWORD },
+    challenge: true
+}))
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html')

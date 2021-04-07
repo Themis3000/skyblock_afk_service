@@ -2,9 +2,9 @@
   "name": "afk_service",
   "version": "1.0.0",
   "dependencies": {
-    "connect-wwwhisper": "^0.1.21",
     "events": "^3.3.0",
     "express": "^4.17.1",
+    "express-basic-auth": "^1.2.0",
     "mineflayer": "^3.6.0",
     "mineflayer-pathfinder": "^1.6.1",
     "socket.io": "^4.0.1"
