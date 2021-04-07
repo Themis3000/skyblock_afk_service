@@ -19,6 +19,10 @@ io.on('connection', (socket) => {
     socket.on('botStop', (msg) => {
         afkBot.disconnect()
     })
+
+    socket.on('sendMsg', (msg) => {
+        afkBot.sendMsg(msg["content"])
+    })
 })
 
 afkBot.events.on('statusUpdate', (status) => {

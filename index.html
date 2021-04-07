@@ -5,22 +5,83 @@
     <title>Panel</title>
 </head>
 <body>
-    <button onclick="botStart()">Start</button>
-    <button onclick="botStop()">Stop</button><br>
-    <div>Bot is currently <b id="online_display"></b></div>
+    <div id="chat_window">
+        <div id="chat_display">
+
+        </div>
+        <div id="chat_send_container">
+            <input id="chat_input">
+            <button id="chat_send" onclick="sendMsg()">Send</button>
+        </div>
+    </div>
+    <div id="control_container">
+        <button onclick="botStart()">Start</button>
+        <button onclick="botStop()">Stop</button><br>
+        <div>Bot is currently <b id="online_display"></b></div>
+    </div>
+
+    <style>
+        #chat_window {
+            height: 500px;
+            width: 700px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #chat_display {
+            height: 95%;
+            overflow-y: auto;
+            background: lightgray;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #chat_send_container {
+            display: flex;
+            flex-direction: row;
+            height: available;
+        }
+
+        #chat_input {
+            width: 80%;
+            height: available;
+        }
+
+        #chat_send {
+            width: 20%;
+            height: available;
+        }
+
+        #control_container {
+            padding-top: 30px;
+        }
+    </style>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
         const onlineDisplay = document.getElementById("online_display")
+        const chatDisplay = document.getElementById("chat_display")
+        const chatInput = document.getElementById("chat_input")
 
         socket.on("botStatus", (msg) => {
             onlineDisplay.innerText = msg["status"]
         })
 
         socket.on("message", (msg) => {
+            const isScrolledToBottom = chatDisplay.scrollHeight - chatDisplay.clientHeight <= chatDisplay.scrollTop + 5
+
             console.log(`message: ${msg["content"]}`)
+            chatDisplay.innerHTML += `<div>${msg["content"]}</div>`
+
+            if(isScrolledToBottom)
+                chatDisplay.scrollTop = chatDisplay.scrollHeight - chatDisplay.clientHeight
         })
+
+        function sendMsg() {
+            socket.emit("sendMsg", {"content": chatInput.value})
+            chatInput.value = ""
+        }
 
         function botStart() {
             console.log("sending start command")
