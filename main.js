@@ -33,8 +33,8 @@ afkBot.events.on('message', (message) => {
     io.emit('message', {'content': message})
 })
 
-http.listen(3000, () => {
-    console.log('listening on *:3000');
+http.listen(80, () => {
+    console.log('listening on *:80');
 })
 
 function getBotStatus() {

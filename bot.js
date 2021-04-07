@@ -28,7 +28,6 @@ class AfkBot {
             //Auto sells inventory 1min
             this.sellLoop = setInterval(() => {
                 this.bot.chat("/sell all")
-                console.log('selling all')
             }, 1000 * 61)
         })
 
@@ -39,7 +38,7 @@ class AfkBot {
 
             if (isAdmin && command === 'payme') {
                 console.log(`paying ${username} $${args[1]}`)
-                //this.bot.chat(`/pay ${username} ${args[1]}`)
+                this.bot.chat(`/pay ${username} ${args[1]}`)
             } else if (isAdmin && command === 'tpaccept') {
                 this.bot.chat('/tpaccept')
             }
