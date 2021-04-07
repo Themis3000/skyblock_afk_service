@@ -26,10 +26,10 @@ class AfkBot {
             //Goes to island
             this.bot.chat(`/visit ${this.island}`)
 
-            //Auto sells inventory 1min
+            //Auto sells inventory 3min
             this.sellLoop = setInterval(() => {
                 this.bot.chat("/sell all")
-            }, 1000 * 61)
+            }, 1000 * 180)
         })
 
         this.bot.on('skyWhisper', (username, message) => {
