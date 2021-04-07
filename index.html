@@ -78,7 +78,15 @@
                 chatDisplay.scrollTop = chatDisplay.scrollHeight - chatDisplay.clientHeight
         })
 
+        chatInput.addEventListener("keyup", (event) => {
+            if (event.code === "Enter")
+                sendMsg()
+        })
+
         function sendMsg() {
+            if (chatInput.value === "")
+                return
+
             socket.emit("sendMsg", {"content": chatInput.value})
             chatInput.value = ""
         }
