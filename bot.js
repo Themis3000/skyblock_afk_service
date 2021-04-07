@@ -13,7 +13,8 @@ class AfkBot {
     createBot() {
         this.bot = mineflayer.createBot({
             host: 'skyblock.net',
-            username: process.env.USERNAME
+            username: process.env.USERNAME,
+            password: process.env.PASSWORD
         })
 
         this.bot.once("spawn", () => {
