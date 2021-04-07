@@ -6,14 +6,14 @@ class AfkBot {
         this.island = process.env.ISLAND
         this.adminAccounts = process.env.ADMINS.split(", ")
         this.events = new EventEmitter
+        this.reconnectTimeout = undefined
         this.connect()
     }
 
     createBot() {
         this.bot = mineflayer.createBot({
-            host: 'skyblock.net',
-            username: process.env.USERNAME,
-            password: process.env.PASSWORD
+            host: '127.0.0.1',
+            username: process.env.USERNAME
         })
 
         this.bot.once("spawn", () => {
@@ -49,21 +49,30 @@ class AfkBot {
         })
 
         this.bot.once('end', () => {
+            this.disconnectTasks()
             this.connected = false
             this.events.emit("statusUpdate", this.status)
             if (this.reconnect)
-                setTimeout(this.createBot, 1000*60*15)
+                this.reconnectTimeout = setTimeout(this.createBot, 1000*60*15)
         })
     }
 
     disconnect() {
+        this.disconnectTasks()
         this.reconnect = false
-        clearInterval(this.sellLoop)
         this.bot.quit()
+    }
+
+    disconnectTasks() {
+        clearInterval(this.sellLoop)
+        if (this.reconnectTimeout !== undefined)
+            clearTimeout(this.reconnectTimeout)
     }
 
     connect() {
         this.reconnect = true
+        if (this.reconnectTimeout !== undefined)
+            clearTimeout(this.reconnectTimeout)
         this.createBot()
     }
 
@@ -73,10 +82,10 @@ class AfkBot {
 
     get status() {
         if (this.connected)
-            return "online"
+            return {"status": "online", "connected": true}
         if (this.reconnect)
-            return "offline, will be auto reconnecting soon"
-        return "offline"
+            return {"status": "offline, will be auto reconnecting soon", "connected": false}
+        return {"status": "offline", "connected": false}
     }
 
     checkAdmin(username) {

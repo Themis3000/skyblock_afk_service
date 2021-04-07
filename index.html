@@ -15,8 +15,8 @@
         </div>
     </div>
     <div id="control_container">
-        <button onclick="botStart()">Start</button>
-        <button onclick="botStop()">Stop</button><br>
+        <button id="start_button" onclick="botStart()" disabled>Start</button>
+        <button id="stop_button" onclick="botStop()" disabled>Stop</button><br>
         <div>Bot is currently <b id="online_display"></b></div>
     </div>
 
@@ -63,9 +63,19 @@
         const onlineDisplay = document.getElementById("online_display")
         const chatDisplay = document.getElementById("chat_display")
         const chatInput = document.getElementById("chat_input")
+        const startButton = document.getElementById("start_button")
+        const stopButton = document.getElementById("stop_button")
 
         socket.on("botStatus", (msg) => {
+            console.log(status)
             onlineDisplay.innerText = msg["status"]
+            if (msg["connected"]) {
+                stopButton.disabled = false
+                startButton.disabled = true
+                return
+            }
+            stopButton.disabled = true
+            startButton.disabled = false
         })
 
         socket.on("message", (msg) => {

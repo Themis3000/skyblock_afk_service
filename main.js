@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 })
 
 io.on('connection', (socket) => {
-    socket.emit("botStatus", {"status": getBotStatus()})
+    socket.emit("botStatus", afkBot.status)
 
     socket.on('botStart', (msg) => {
         afkBot.connect()
@@ -32,7 +32,7 @@ io.on('connection', (socket) => {
 })
 
 afkBot.events.on('statusUpdate', (status) => {
-    io.emit('botStatus', {'status': status})
+    io.emit('botStatus', status)
 })
 
 afkBot.events.on('message', (message) => {
@@ -43,8 +43,3 @@ http.listen(process.env.PORT || 3000, () => {
     console.log('Web server started!');
 })
 
-function getBotStatus() {
-    if (afkBot.connected)
-        return "online"
-    return "offline"
-}
