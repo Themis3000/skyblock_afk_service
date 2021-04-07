@@ -1,9 +1,12 @@
 const app = require('express')()
 const http = require('http').Server(app)
 const io = require('socket.io')(http)
+const wwwhisper = require('connect-wwwhisper')
 const bot = require('./bot.js')
 
 const afkBot = new bot.AfkBot()
+
+app.use(wwwhisper())
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html')
