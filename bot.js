@@ -40,7 +40,10 @@ class AfkBot {
             if (isAdmin && command === 'payme') {
                 console.log(`paying ${username} $${args[1]}`)
                 this.bot.chat(`/pay ${username} ${args[1]}`)
-            } else if (isAdmin && command === 'tpaccept') {
+                return
+            }
+
+            if (isAdmin && command === 'tpaccept') {
                 this.bot.chat('/tpaccept')
             }
         })
@@ -90,7 +93,7 @@ class AfkBot {
     }
 
     checkAdmin(username) {
-        this.adminAccounts.includes(username)
+        return this.adminAccounts.includes(username)
     }
 }
 
